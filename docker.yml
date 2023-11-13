@@ -1,0 +1,27 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+    - name: INSTALL UPDATES (CentOS)
+      yum:
+        update_cache: yes
+        update_only: yes
+      when: ansible_distribution == "CentOS"
+
+    - name: INSTALL UPDATES (Ubuntu)
+      apt:
+        upgrade: dist
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"
+
+- hosts: ubuntu_nagios
+  become: true
+  roles:
+    - ubuntu_docker
+
+- hosts: centos_nagios
+  become: true
+  roles:
+    - centos_docker
